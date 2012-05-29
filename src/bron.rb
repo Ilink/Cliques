@@ -1,6 +1,6 @@
 require "set_util"
 
-cliques = []
+
 def bron(result, possible, exclude, cliques)
 
       if possible.empty? and exclude.empty?
@@ -8,9 +8,9 @@ def bron(result, possible, exclude, cliques)
       end
 
       possible.each do |v|
-        bron(R ⋃ {v}, P ⋂ neighbors(v), exclude ⋂ neighbors(v))
-        possible = possible \ {v}
-        exclude = exclude ⋃ {v}
+        bron( union(result, v), intersection(possible, neighbors(v, possible)), intersection(exclude, neighbors(v, possible)), cliques)
+        possible = rel_complement(possible, v)
+        exclude = union(exclude, v)
       end
 
 end
