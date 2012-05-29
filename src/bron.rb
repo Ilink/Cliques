@@ -1,5 +1,4 @@
-require "set_util"
-
+require_relative "./set_util"
 
 def bron(result, possible, exclude, cliques)
 
