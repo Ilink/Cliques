@@ -1,9 +1,14 @@
+require 'set'
+
 def union(a, b)
 
 end
 
 def intersection(a, b)
+  set = []
+  a.each do |val|
 
+  end
 end
 
 # i dont know if this is neccesary
