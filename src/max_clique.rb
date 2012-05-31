@@ -1,22 +1,13 @@
 def max_clique(chosen, graph)
   # find biggest clique:
   clique = []
-  chosen.each do |neighbor|
-    intersections = []
-    graph[neighbor].each do |potential_vert|
-      _neighbor = graph.to_set
-      neighbor_set = graph[neighbor].to_set
-
-      graph[neighbor].intersection(graph[potential_vert])
-    end
-  end
 
   intersections = {}
+  chosen_set = graph[chosen].to_set
   graph[chosen].each do |potential|
     # this set conversion is more convenient, but probably not very fast
     # lets us do easy intersection calculations
     potential_set = graph[potential].to_set
-    chosen_set = graph[chosen].to_set
 
     # collect all intersections so we can sort by size
     intersections[potential] = chosen_set.intersection(potential_set)
