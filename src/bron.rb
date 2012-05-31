@@ -14,23 +14,3 @@ def bron(result, possible, exclude, cliques)
       end
 
 end
-
-def max_clique(chosen, set)
-  # find biggest clique:
-  clique = []
-  chosen.each do |neighbor|
-    set[neighbor].each do |potential_vert|
-      clique.push(intersection(set[neighbor], set[potential_vert]))
-    end
-  end
-end
-
-def all_max_cliques(cliques, set)
-  until set.empty?
-    #cliques.push(max_clique(set.first, set))
-    set.each do |vert|
-      max_clique(vert, set)
-    end
-
-  end
-end
