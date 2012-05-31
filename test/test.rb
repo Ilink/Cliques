@@ -1,13 +1,28 @@
 require '../src/bron'
+require '../src/max_clique'
+require 'set'
+
+###############
+# Setup
+###############
 
 # Read adjacency matrix
-adj_matrix = []
+  #
+adj_matrix = {}
 verts = IO.readlines("input.txt")
-verts.each do |vert|
-  adj_matrix.push(vert.split(" "))
+verts.each_with_index do |vert, i|
+  adj_matrix[i] = vert.split(" ")
 end
 
+puts "Input Graph:"
 adj_matrix.each do |row|
   print row, "\n"
 end
 
+###############
+# Max Clique
+###############
+
+#print adj_matrix[0]
+puts adj_matrix[0]
+max_clique(0, adj_matrix)
