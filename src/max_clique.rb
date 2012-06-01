@@ -16,43 +16,41 @@ def max_clique(chosen, graph)
     print 'potential set: ', potential_set, "\n"
 
     # collect all intersections so we can sort by size
-    #unless potential_set.nil?
+    unless potential_set.nil?
       intersections[potential] = chosen_set.intersection(potential_set).to_a
-    #end
+    end
   end
 
-  print 'intersections: ', intersections, "\n"
-
   intersections = intersections.sort_by {|x,y|
-    #print 'comparison:', x.size, "\t", y.size, "\t", y.size <=> x.size, "\n"
     (y.size <=> x.size)
   }
-
-  print 'intersections: ', intersections.reverse!, "\n"
+  intersections.reverse! # I have NO idea why doing x.size <=> y.size doesn't revers the values, but it doesn't
+  print 'intersections: ', intersections, "\n"
 
   intersections.each do |intersection|
     intersection_set = intersection[1].to_set # inefficient!
-    #if intersection_set.superset?(@clique)
-      @clique.add(Integer(intersection[0]))
-    #end
-    print intersection[1], "\n"
-
+    print "candidate: ", intersection_set.inspect, "\tclique: ", @clique.inspect, "\n"
+    if intersection_set.intersection(@clique) == @clique
+      @clique.add(intersection[0])
+    end
   end
 
-  @clique.add(chosen) # add the selected node itself
+  @clique.add(chosen.to_s) # add the selected node itself
   @clique.to_a
 end
 
 def remove_keys(arr, hash)
   arr.each do |val|
-    hash.delete(val)
+    hash.delete(Integer(val))
   end
   hash
 end
 
-def all_max_cliques(graph)
+def all_max_cliques(_graph)
   cliques = []
-  until graph.empty? or graph.nil?
+  graph = _graph
+
+  until graph.empty?
   #graph.each do
     largest_clique = []
     graph.each do |vert|
@@ -65,6 +63,6 @@ def all_max_cliques(graph)
 
     graph = remove_keys(largest_clique, graph)
   end
-  print cliques
+  print cliques, "\n"
 
 end

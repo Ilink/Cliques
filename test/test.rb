@@ -25,6 +25,6 @@ end
 
 #print adj_matrix[0]
 #puts adj_matrix[1]
-print "clique: ", max_clique(0, adj_matrix)
+#print "clique: ", max_clique(0, adj_matrix), "\n"
 
-#all_max_cliques(adj_matrix)
+all_max_cliques(adj_matrix)
