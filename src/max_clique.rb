@@ -13,12 +13,12 @@ def max_clique(chosen, graph)
     # this set conversion is more convenient, but probably not very fast
     # lets us do easy intersection calculations
     potential_set = graph[Integer(potential)] # this is a really awkward way of doing this..
-    print 'potential set: ', graph[Integer(potential)], "\n"
+    print 'potential set: ', potential_set, "\n"
 
     # collect all intersections so we can sort by size
-    unless chosen_set.empty? or chosen_set.nil? or potential_set.nil?
+    #unless potential_set.nil?
       intersections[potential] = chosen_set.intersection(potential_set).to_a
-    end
+    #end
   end
 
   print 'intersections: ', intersections, "\n"
@@ -32,9 +32,9 @@ def max_clique(chosen, graph)
 
   intersections.each do |intersection|
     intersection_set = intersection[1].to_set # inefficient!
-    if intersection_set.superset?(@clique)
-      @clique.add(intersection[0])
-    end
+    #if intersection_set.superset?(@clique)
+      @clique.add(Integer(intersection[0]))
+    #end
     print intersection[1], "\n"
 
   end
@@ -52,8 +52,8 @@ end
 
 def all_max_cliques(graph)
   cliques = []
-  #until graph.empty? or graph.nil?
-  graph.each do
+  until graph.empty? or graph.nil?
+  #graph.each do
     largest_clique = []
     graph.each do |vert|
       clique = max_clique(vert[0], graph)
@@ -64,7 +64,6 @@ def all_max_cliques(graph)
     print "largest clique!: ", largest_clique, "\n"
 
     graph = remove_keys(largest_clique, graph)
-    #graph.subtract(largest_clique)
   end
   print cliques
 
