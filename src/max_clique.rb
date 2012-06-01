@@ -1,49 +1,71 @@
 def max_clique(chosen, graph)
+  print "passed graph: ", chosen, "\t", graph, "\n"
+  return [] if graph[chosen].nil?
   # find biggest clique:
-  clique = []
+  @clique = [].to_set
 
   intersections = {}
+
   chosen_set = graph[chosen].to_set
+
   print "chosen set: ", chosen_set.inspect, "\n"
   graph[chosen].each do |potential|
     # this set conversion is more convenient, but probably not very fast
     # lets us do easy intersection calculations
-    #puts graph, i
     potential_set = graph[Integer(potential)] # this is a really awkward way of doing this..
-    #potential_set = potential.to_set
     print 'potential set: ', graph[Integer(potential)], "\n"
 
     # collect all intersections so we can sort by size
     intersections[potential] = chosen_set.intersection(potential_set).to_a
   end
 
-  intersections.each_with_index do |intersection, i|
-    #puts intersection
-    #intersection.sort!
-    # sort these based upon their value's sizes
+  print 'intersections: ', intersections, "\n"
 
-    intersection.sort! {|x,y|
-      print 'comparison:', x.size, "\t", y.size, "\t", y.size <=> x.size, "\n"
-      y.size <=> x.size
-    }
+  intersections = intersections.sort_by {|x,y|
+    #print 'comparison:', x.size, "\t", y.size, "\t", y.size <=> x.size, "\n"
+    (y.size <=> x.size)
+  }
 
-    #print intersection, "\n"
+  print 'intersections: ', intersections.reverse!, "\n"
 
+  intersections.each do |intersection|
+    intersection_set = intersection[1].to_set # inefficient!
+    if intersection_set.superset?(@clique)
+      @clique.add(intersection[0])
+    end
+    print intersection[1], "\n"
 
   end
-  print 'inersections: ', intersections, "\n"
-  clique
+
+  @clique.add(chosen) # add the selected node itself
+  @clique.to_a
+end
+
+def remove_keys(arr, hash)
+  arr.each do |val|
+    hash.delete(val)
+  end
+  return hash
 end
 
 def all_max_cliques(graph)
   cliques = []
-  #until set.empty?
+  until graph.empty? or graph.nil?
     largest_clique = []
     graph.each do |vert|
-      clique = max_clique(vert, graph)
+      clique = max_clique(vert[0], graph)
+      print 'cliqueeee', clique, "\t", vert, "\n"
       largest_clique = clique if clique.size > largest_clique.size
     end
-    graph.subtract(largest_clique)
-  #end
+    cliques.push(largest_clique)
+    print "largest clique!: ", largest_clique, "\n"
+
+    #largest_clique.each do |vert|
+    #  graph.delete(vert.to_s)
+    #end
+
+    graph = remove_keys(largest_clique, graph)
+    #graph.subtract(largest_clique)
+  end
 
 end
