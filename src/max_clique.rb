@@ -16,7 +16,9 @@ def max_clique(chosen, graph)
     print 'potential set: ', graph[Integer(potential)], "\n"
 
     # collect all intersections so we can sort by size
-    intersections[potential] = chosen_set.intersection(potential_set).to_a
+    unless chosen_set.empty? or chosen_set.nil? or potential_set.nil?
+      intersections[potential] = chosen_set.intersection(potential_set).to_a
+    end
   end
 
   print 'intersections: ', intersections, "\n"
@@ -45,12 +47,13 @@ def remove_keys(arr, hash)
   arr.each do |val|
     hash.delete(val)
   end
-  return hash
+  hash
 end
 
 def all_max_cliques(graph)
   cliques = []
-  until graph.empty? or graph.nil?
+  #until graph.empty? or graph.nil?
+  graph.each do
     largest_clique = []
     graph.each do |vert|
       clique = max_clique(vert[0], graph)
@@ -60,12 +63,9 @@ def all_max_cliques(graph)
     cliques.push(largest_clique)
     print "largest clique!: ", largest_clique, "\n"
 
-    #largest_clique.each do |vert|
-    #  graph.delete(vert.to_s)
-    #end
-
     graph = remove_keys(largest_clique, graph)
     #graph.subtract(largest_clique)
   end
+  print cliques
 
 end
