@@ -14,7 +14,7 @@
 # The above would represent vert 1 and its connections to verts 0, 1 and 3.
 #
 # @param chosen
-# The number of the selected
+# The vertex number(int) of the selected vertex
 
 def max_clique(chosen, graph)
   #print "passed graph: ", chosen, "\t", graph, "\n"
@@ -64,12 +64,22 @@ def remove_keys(arr, hash)
   hash
 end
 
+# @function all_max_cliques(graph)
+# First, we sort the graph. The first node, should therefore have the most number of connections.
+# The basic idea here is:
+#   1. Find maximum clique in graph
+#   2. Remove that clique's verts from the graph
+#   3. Repeat until all verts have been removed
+#
+# This idea rests on the assumption that having a lot of connections means greater potential for a large clique. I'm not entirely sure if this is correct!
+# TODO: implement sorting, so we start with the clique with the most number of connections. Right now, the test input is already sorted like this, so it doesn't matter for testing
+
+
 def all_max_cliques(_graph)
   cliques = []
   graph = _graph
 
   until graph.empty?
-  #graph.each do
     largest_clique = []
     graph.each do |vert|
       clique = max_clique(vert[0], graph)
