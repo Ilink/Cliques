@@ -1,3 +1,6 @@
+# todo avoid conversions between strings and ints for hash accessors
+# todo avoid conversions back and forth between sets and arrays
+
 # @function max_clique(chosen, graph)
 # Finds the maximum clique in a graph. This uses a highly unoptimized brute-force method. This only works if you are passing in the node with the largest number of connections.
 # There are several steps:
@@ -40,7 +43,7 @@ def max_clique(chosen, graph)
   end
 
   intersections = intersections.sort_by {|x,y|
-    (y.size <=> x.size)
+    y.size <=> x.size
   }
   intersections.reverse! # I have NO idea why doing x.size <=> y.size doesn't revers the values, but it doesn't
   print 'intersections: ', intersections, "\n"
@@ -73,7 +76,6 @@ end
 #
 # This idea rests on the assumption that having a lot of connections means greater potential for a large clique. I'm not entirely sure if this is correct!
 # TODO: implement sorting, so we start with the clique with the most number of connections. Right now, the test input is already sorted like this, so it doesn't matter for testing
-
 
 def all_max_cliques(_graph)
   cliques = []
