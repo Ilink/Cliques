@@ -88,9 +88,9 @@ def max_clique(chosen, _graph)
       end
     else
       puts "added largest node instead"
-      #clique.add(@largest_node[0])
-      #
-      #intersection_set.delete(@largest_node[0])
+      clique.add(@largest_node[0])
+
+      intersection_set.delete(@largest_node[0])
 
     end
 
@@ -99,7 +99,7 @@ def max_clique(chosen, _graph)
 
   end
 
-  clique.add(chosen.to_s) # add the selected node itself
+  clique.add(chosen) # add the selected node itself
   clique.to_a
 end
 

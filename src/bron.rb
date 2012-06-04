@@ -1,6 +1,3 @@
-require_relative "./set_util"
-
-
 def bron(result, possible, exclude, cliques)
 
       if possible.empty? and exclude.empty?
