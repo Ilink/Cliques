@@ -24,9 +24,6 @@
 def max_clique(chosen, _graph)
   graph = _graph
 
-  #puts "HERE HER EHERE" if chosen == 8
-
-
   clique = Set.new
   intersections = {}
   chosen_set = graph[chosen].to_set
@@ -35,7 +32,7 @@ def max_clique(chosen, _graph)
   graph[chosen].each do |potential|
     # this set conversion is more convenient (for set operations), but probably not very fast
     potential_set = graph[Integer(potential)] # this is a really awkward way of doing this..
-    print 'potential set: ', potential_set, "\n"
+    #print 'potential set: ', potential_set, "\n"
 
     # collect all intersections so we can sort by size
     # this represents the number of connections the chosen node shares with the visited node
@@ -45,27 +42,59 @@ def max_clique(chosen, _graph)
     end
   end
 
-  intersections = intersections.sort_by {|x,y|
-    y.size <=> x.size
-  }
-  intersections.reverse! # I have NO idea why doing x.size <=> y.size doesn't revers the values, but it doesn't
-  #print 'intersections: ', intersections, "\n" if chosen == 0
+  intersections = Hash[intersections.sort_by {|k,v| v.size}.reverse!]
 
+  print "intersections after sort!: ", intersections, "\n"
+
+  intersection_set = convert_to_set(intersections)
+
+  same_size = []
   prev_intersection = nil
+  @largest_node = nil
   # todo elaborate on this step: account for candidates nodes which are the same size. If they are the same size, I need to create a routine to explore which one is best.
-  intersections.each do |intersection|
-    intersection_set = intersection[1].to_set # inefficient!
+  intersection_set.each do |intersection|
 
     unless prev_intersection.nil?
-      if intersection.size == prev_intersection.size
+      if intersection[1].size == prev_intersection[1].size
+        same_size.push(prev_intersection) if same_size.empty? # takes care of initial case
+        same_size.push(intersection)
+      else # test each branch individually
+        print "same size collected: ", same_size,"\n"
+        largest = 0
+        same_size.each do |node|
+          intersection_set.each do |compare_to| # which node has the greatest intersection with the others?
+            if node != compare_to
+              new_size = node[1].intersection(compare_to[1]).size
 
-        prev_intersection = intersection
+              #print "TEST", node[1].intersection(compare_to[1]).inspect, "\n"
+              if new_size > largest
+                largest = new_size
+                @largest_node = node
+              end
+            end
+          end
+        end
+        print "largest:!!!: ", largest, "node: ", @largest_node.inspect, "\n"
+        # remove from potential pool
+
       end
     end
 
-    if intersection_set.intersection(clique) == clique or intersection_set.superset?(clique)
-      clique.add(intersection[0])
+    prev_intersection = intersection
+
+    if @largest_node.nil?
+      if intersection[1].intersection(clique) == clique or intersection[1].superset?(clique)
+        clique.add(intersection[0])
+      end
+    else
+      puts "added largest node instead"
+      #clique.add(@largest_node[0])
+      #
+      #intersection_set.delete(@largest_node[0])
+
     end
+
+
     #print "candidate: ", intersection_set.inspect, "\tclique: ", @clique.inspect, "\n"
 
   end
@@ -74,12 +103,6 @@ def max_clique(chosen, _graph)
   clique.to_a
 end
 
-def remove_keys(arr, hash)
-  arr.each do |val|
-    hash.delete(Integer(val))
-  end
-  hash
-end
 
 # @function all_max_cliques(graph)
 # First, we sort the graph. The first node, should therefore have the most number of connections.
@@ -94,7 +117,7 @@ def all_max_cliques(_graph)
   cliques = []
   graph = _graph
 
-  #until graph.empty?
+  until graph.empty?
     largest_clique = []
     graph.each do |vert|
       clique = max_clique(vert[0], graph)
@@ -108,8 +131,8 @@ def all_max_cliques(_graph)
     cliques.push(largest_clique)
     print "largest clique!: ", largest_clique, "\n"
 
-    #graph = remove_keys(largest_clique, graph)
-  #end
+    graph = remove_keys(largest_clique, graph)
+  end
   print cliques, "\n"
 
 end
