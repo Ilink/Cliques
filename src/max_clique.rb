@@ -11,7 +11,9 @@
 #   4. For each mutual connection, add it to the clique IFF it is a superset of the nodes within clique
 #       a) Otherwise, you would wind up with nodes that are not mutually connected!
 #
-# @param graph
+# This code currently rests on the assumption that the set with the largest intersection is the best to start making a clique with. This is not entirely the case, and I need to correct it...
+#
+# @param _graph
 # A hash of arrays, keyed by vertex number. EG:
 #   "1" => [0,1,3]
 # The above would represent vert 1 and its connections to verts 0, 1 and 3.
@@ -19,9 +21,11 @@
 # @param chosen
 # The vertex number(int) of the selected vertex
 
-def max_clique(chosen, graph)
-  #print "passed graph: ", chosen, "\t", graph, "\n"
-  return [] if graph[chosen].nil?
+def max_clique(chosen, _graph)
+  graph = _graph
+
+  #puts "HERE HER EHERE" if chosen == 8
+
 
   clique = Set.new
   intersections = {}
@@ -29,10 +33,9 @@ def max_clique(chosen, graph)
 
   #print "chosen set: ", chosen_set.inspect, "\n"
   graph[chosen].each do |potential|
-    # this set conversion is more convenient, but probably not very fast
-    # lets us do easy intersection calculations (such as intersection)
+    # this set conversion is more convenient (for set operations), but probably not very fast
     potential_set = graph[Integer(potential)] # this is a really awkward way of doing this..
-    #print 'potential set: ', potential_set, "\n"
+    print 'potential set: ', potential_set, "\n"
 
     # collect all intersections so we can sort by size
     # this represents the number of connections the chosen node shares with the visited node
@@ -46,14 +49,25 @@ def max_clique(chosen, graph)
     y.size <=> x.size
   }
   intersections.reverse! # I have NO idea why doing x.size <=> y.size doesn't revers the values, but it doesn't
-  #print 'intersections: ', intersections, "\n"
+  #print 'intersections: ', intersections, "\n" if chosen == 0
 
+  prev_intersection = nil
+  # todo elaborate on this step: account for candidates nodes which are the same size. If they are the same size, I need to create a routine to explore which one is best.
   intersections.each do |intersection|
     intersection_set = intersection[1].to_set # inefficient!
-    #print "candidate: ", intersection_set.inspect, "\tclique: ", @clique.inspect, "\n"
-    if intersection_set.intersection(clique) == clique
+
+    unless prev_intersection.nil?
+      if intersection.size == prev_intersection.size
+
+        prev_intersection = intersection
+      end
+    end
+
+    if intersection_set.intersection(clique) == clique or intersection_set.superset?(clique)
       clique.add(intersection[0])
     end
+    #print "candidate: ", intersection_set.inspect, "\tclique: ", @clique.inspect, "\n"
+
   end
 
   clique.add(chosen.to_s) # add the selected node itself
@@ -84,7 +98,8 @@ def all_max_cliques(_graph)
     largest_clique = []
     graph.each do |vert|
       clique = max_clique(vert[0], graph)
-      print 'cliqueeee', clique, "\t", vert, "\n"
+      print 'cliqueeee', clique, "\n"
+      #print 'cliqueeee', clique, "\t", vert, "\n"
       if clique.size > largest_clique.size
         #print "largest clique was: ", largest_clique, "\t New clique: ", clique, "\n"
         largest_clique = clique

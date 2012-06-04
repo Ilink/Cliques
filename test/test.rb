@@ -9,15 +9,15 @@ require 'set'
 # Read adjacency matrix
   #
 adj_matrix = {}
-verts = IO.readlines("input.txt")
+verts = IO.readlines("overlaps.txt")
 verts.each_with_index do |vert, i|
   adj_matrix[i] = vert.split(" ")
 end
 
-puts "Input Graph:"
-adj_matrix.each do |row|
-  print row, "\n"
-end
+#puts "Input Graph:"
+#adj_matrix.each do |row|
+#  print row, "\n"
+#end
 
 ###############
 # Max Clique
